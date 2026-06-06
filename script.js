@@ -237,6 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const dateString = now.toLocaleDateString('fr-FR').replace(/\//g, '-');
 
         // --- PDF Content Generation ---
+        const amount = ui.amount.value;
 
         // 1. Title
         const simName = document.getElementById('simulationName').value || 'Simulation';
@@ -292,6 +293,14 @@ document.addEventListener('DOMContentLoaded', () => {
         doc.text(`Gestion du différé : ${intercalaryStrategy}`, 14, yOffset); yOffset += 5;
         doc.text(`Remboursements anticipés : ${prepaymentsSummary}`, 14, yOffset); yOffset += 5;
         doc.text(`Stratégie RA : ${prepaymentStrategy}`, 14, yOffset); yOffset += 5;
+
+        // --- Ajout du Graphique au PDF ---
+        const chartCanvas = document.getElementById('loanChart');
+        if (chartCanvas) {
+            const chartImg = chartCanvas.toDataURL('image/png', 1.0);
+            doc.addImage(chartImg, 'PNG', 15, yOffset, 180, 80);
+            yOffset += 85; // On décale le reste du contenu vers le bas
+        }
 
         // 3. Summary Results
         yOffset += 5; // Add a little space
