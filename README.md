@@ -17,7 +17,7 @@ Un outil complet et professionnel pour simuler des prêts bancaires avec gestion
 2. Ouvrez `index.html` dans votre navigateur.
 
 ## Démo en ligne
-🚀 **Accéder au simulateur en ligne**
+🚀 **[Accéder au simulateur en ligne](https://alexnet.github.io/simulateur-pret/)**
 
 ## Technologies
 - HTML5 / CSS3 (Flexbox & Grid)
