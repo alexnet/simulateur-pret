@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur de Prêt Immobilier</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+
+    <header>
+        <h1>Simulateur d'échéancier de prêt</h1>
+    </header>
+
+    <main>
+        <div class="calculator-grid">
+            <section class="card input-section">
+                <div class="form-group">
+                    <label>Nom de la simulation</label>
+                    <input type="text" id="simulationName" placeholder="Ex: Mon prêt immo" value="Ma Simulation">
+                </div>
+                <div class="form-group">
+                    <label>Montant du prêt (€)</label>
+                    <input type="number" id="amount" value="100000">
+                </div>
+                <div class="form-group">
+                    <label>Date de déblocage des fonds</label>
+                    <input type="date" id="startDate">
+                </div>
+                <div class="form-group">
+                    <label>Durée (mois)</label>
+                    <input type="number" id="duration" value="120">
+                </div>
+                <div class="form-group">
+                    <label>Date du premier remboursement</label>
+                    <input type="date" id="firstPaymentDate">
+                </div>
+
+                <div class="form-group">
+                    <label>Périodicité des remboursements</label>
+                    <select id="periodicity">
+                        <option value="1" selected>Mensuel</option>
+                        <option value="3">Trimestriel</option>
+                        <option value="6">Semestriel</option>
+                        <option value="12">Annuel</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Gestion du différé (intérêts intercalaires)</label>
+                    <div class="radio-group" style="margin-top: 10px; font-size: 0.9rem;">
+                        <label style="font-weight: normal; display: inline-flex; align-items: center; gap: 5px;">
+                            <input type="radio" name="intercalary-strategy" value="pay" checked> Payer les intérêts
+                        </label>
+                        <label style="font-weight: normal; display: inline-flex; align-items: center; gap: 5px; margin-left: 15px;">
+                            <input type="radio" name="intercalary-strategy" value="capitalize"> Les capitaliser
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Tranches de taux d'intérêt</label>
+                    <div id="rate-tiers-container">
+                        <div class="rate-tier">
+                            <input type="number" step="0.01" placeholder="Taux %" class="tier-rate" value="12">
+                            <input type="number" placeholder="Dès le mois n°" class="tier-month" value="1" readonly>
+                            <input type="number" placeholder="Capital (€)" class="tier-manual-balance" style="font-size: 0.8rem; flex: 1;">
+                        </div>
+                    </div>
+                    <button type="button" id="add-tier-btn" class="secondary-btn">+ Ajouter une tranche</button>
+                </div>
+
+                <div class="form-group">
+                    <label>Option de remboursement anticipé</label>
+                    <div class="radio-group" style="margin-top: 10px; font-size: 0.9rem;">
+                        <label style="font-weight: normal; display: inline-flex; align-items: center; gap: 5px;">
+                            <input type="radio" name="prepayment-strategy" value="payment" checked> Réduire la mensualité
+                        </label>
+                        <label style="font-weight: normal; display: inline-flex; align-items: center; gap: 5px; margin-left: 15px;">
+                            <input type="radio" name="prepayment-strategy" value="duration"> Réduire la durée
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Remboursements anticipés ponctuel</label>
+                    <div id="prepayments-container">
+                    </div>
+                    <button type="button" id="add-prepayment-btn" class="secondary-btn">+ Ajouter un remboursement</button>
+                </div>
+
+                <div class="form-group">
+                    <label>Frais de dossier (€)</label>
+                    <input type="number" id="fees" value="500">
+                </div>
+                <div class="form-group">
+                    <label>Calcul de l'assurance</label>
+                    <div class="radio-group" style="margin-top: 5px; font-size: 0.85rem; margin-bottom: 10px;">
+                        <label><input type="radio" name="insurance-method" value="rate" checked> Par Taux</label>
+                        <label style="margin-left:15px;"><input type="radio" name="insurance-method" value="fixed"> Montant Fixe</label>
+                    </div>
+                    
+                    <div id="insurance-rate-config">
+                        <input type="number" id="insurance-rate" step="0.01" value="0.36" placeholder="Taux annuel %">
+                        <div class="radio-group" style="margin-top: 8px; font-size: 0.85rem;">
+                            <label style="font-weight: normal;"><input type="radio" name="insurance-type" value="initial" checked> Sur cap. initial</label>
+                            <label style="font-weight: normal; margin-left: 10px;"><input type="radio" name="insurance-type" value="remaining"> Sur cap. restant</label>
+                        </div>
+                    </div>
+                    
+                    <div id="insurance-fixed-config" style="display: none;">
+                        <input type="number" id="insurance-fixed" step="0.01" value="30" placeholder="Montant fixe par échéance">
+                        <small style="color: #64748b; display: block; margin-top: 4px;">Montant prélevé à chaque remboursement.</small>
+                    </div>
+                </div>
+
+                <button id="calculate-btn">Calculer l'échéancier</button>
+                <button id="download-pdf-btn" class="secondary-btn" style="display: none; width: 100%; margin-top: 10px;">Télécharger l'échéancier en PDF</button>
+                
+                <button id="export-json-btn" class="secondary-btn" style="width: 100%; margin-top: 10px;">Exporter simulation (JSON)</button>
+                <button id="import-json-btn" class="secondary-btn" style="width: 100%; margin-top: 10px;">Importer simulation (JSON)</button>
+                <input type="file" id="import-json-input" style="display: none;" accept=".json">
+            </section>
+
+            <section id="summary" class="summary-section"></section>
+        </div>
+
+        <div class="card chart-container" style="margin-bottom: 2rem; height: 400px;">
+            <canvas id="loanChart"></canvas>
+        </div>
+
+        <section id="parameters-display" class="card" style="margin-bottom: 2rem; display: none;">
+            <h3 style="margin-top: 0; color: var(--primary-color);">Récapitulatif des paramètres</h3>
+            <div id="parameters-content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.9rem;"></div>
+        </section>
+
+        <div class="results-table">
+            <table id="amortizationTable">
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Date</th>
+                        <th>Taux (%)</th>
+                        <th>Mensualité</th>
+                        <th>Intérêts</th>
+                        <th>Assurance</th>
+                        <th>Capital amorti</th>
+                        <th>Remb. Ant.</th>
+                        <th>Capital restant</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 My Web Project</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
