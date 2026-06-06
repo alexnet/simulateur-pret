@@ -1,4 +1,4 @@
-# Simulateur d'échéancier de prêt immobilier
+# 🚀 Simulateur d'échéancier de prêt immobilier
 
 Un outil complet et professionnel pour simuler des prêts bancaires avec gestion avancée des options.
 
@@ -17,7 +17,7 @@ Un outil complet et professionnel pour simuler des prêts bancaires avec gestion
 2. Ouvrez `index.html` dans votre navigateur.
 
 ## Démo en ligne
-🚀 **[Accéder au simulateur en ligne](https://alexnet.github.io/simulateur-pret/)**
+🚀 **[Accéder au simulateur en ligne: ](https://alexnet.github.io/simulateur-pret/)**
 
 ## Technologies
 - HTML5 / CSS3 (Flexbox & Grid)
