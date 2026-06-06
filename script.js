@@ -7,10 +7,22 @@ document.addEventListener('DOMContentLoaded', () => {
         duration: document.getElementById('duration'),
         startDate: document.getElementById('startDate'),
         firstPaymentDate: document.getElementById('firstPaymentDate'),
-        calculateBtn: document.getElementById('calculate-btn')
+        calculateBtn: document.getElementById('calculate-btn'),
+        simulationName: document.getElementById('simulationName'),
+        fees: document.getElementById('fees'),
+        insuranceRate: document.getElementById('insurance-rate'),
+        insuranceFixed: document.getElementById('insurance-fixed'),
+        periodicity: document.getElementById('periodicity'),
+        summary: document.getElementById('summary'),
+        rateTiersContainer: document.getElementById('rate-tiers-container'),
+        prepaymentsContainer: document.getElementById('prepayments-container'),
+        downloadPdfBtn: document.getElementById('download-pdf-btn'),
+        exportJsonBtn: document.getElementById('export-json-btn'),
+        importJsonBtn: document.getElementById('import-json-btn'),
+        importJsonInput: document.getElementById('import-json-input')
     };
 
-    const button = document.getElementById('calculate-btn');
+    const button = ui.calculateBtn;
     const addTierBtn = document.getElementById('add-tier-btn');
     const tiersContainer = document.getElementById('rate-tiers-container');
     const addPrepaymentBtn = document.getElementById('add-prepayment-btn');
@@ -43,18 +55,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Shared Logic for Data Handling ---
     const getSimulationData = () => {
         return {
-            simulationName: document.getElementById('simulationName').value,
-            amount: document.getElementById('amount').value,
-            duration: document.getElementById('duration').value,
-            startDate: document.getElementById('startDate').value,
-            firstPaymentDate: document.getElementById('firstPaymentDate').value,
-            fees: document.getElementById('fees').value,
+            simulationName: ui.simulationName.value,
+            amount: ui.amount.value,
+            duration: ui.duration.value,
+            startDate: ui.startDate.value,
+            firstPaymentDate: ui.firstPaymentDate.value,
+            fees: ui.fees.value,
             insuranceMethod: document.querySelector('input[name="insurance-method"]:checked').value,
-            insuranceRate: document.getElementById('insurance-rate').value,
-            insuranceFixed: document.getElementById('insurance-fixed').value,
+            insuranceRate: ui.insuranceRate.value,
+            insuranceFixed: ui.insuranceFixed.value,
             insuranceType: document.querySelector('input[name="insurance-type"]:checked').value,
             intercalaryStrategy: document.querySelector('input[name="intercalary-strategy"]:checked').value,
-            periodicity: document.getElementById('periodicity').value,
+            periodicity: ui.periodicity.value,
             prepaymentStrategy: document.querySelector('input[name="prepayment-strategy"]:checked').value,
             tiers: Array.from(document.querySelectorAll('#rate-tiers-container .rate-tier')).map(row => ({
                 rate: row.querySelector('.tier-rate').value,

@@ -17,7 +17,6 @@ Un outil complet et professionnel pour simuler des prêts bancaires avec gestion
 2. Ouvrez `index.html` dans votre navigateur.
 
 ## Démo en ligne
-Le simulateur est accessible à l'adresse suivante : Lien vers la démo
 🚀 **Accéder au simulateur en ligne**
 
 ## Technologies
