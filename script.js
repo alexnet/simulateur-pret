@@ -1,6 +1,15 @@
 let loanChart = null;
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Cache DOM Elements for performance and clarity
+    const ui = {
+        amount: document.getElementById('amount'),
+        duration: document.getElementById('duration'),
+        startDate: document.getElementById('startDate'),
+        firstPaymentDate: document.getElementById('firstPaymentDate'),
+        calculateBtn: document.getElementById('calculate-btn')
+    };
+
     const button = document.getElementById('calculate-btn');
     const addTierBtn = document.getElementById('add-tier-btn');
     const tiersContainer = document.getElementById('rate-tiers-container');
